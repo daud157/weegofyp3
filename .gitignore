@@ -1,0 +1,24 @@
+# Ignore node_modules directory
+node_modules/
+# Ignore node_modules folder in the backend
+backend/node_modules/
+.expo/
+# Ignore node_modules folder in the frontend
+frontend/node_modules/
+# Ignore log files
+*.log
+
+# Ignore build directories
+dist/
+build/
+
+# Ignore environment variable files
+.env
+
+# Ignore temporary files
+*.tmp
+*.swp
+
+# Ignore OS generated files
+.DS_Store
+Thumbs.db
