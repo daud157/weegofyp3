@@ -67,10 +67,13 @@ const Signin: React.FC = () => {
       setLoading(true);
 
       try {
-        const res = await axios.post("http://192.168.100.7:3000/auth/login", {
-          email,
-          password,
-        });
+        const res = await axios.post(
+          `http://${process.env.EXPO_PUBLIC_BACKEND_IP}:3000/auth/login`,
+          {
+            email,
+            password,
+          }
+        );
 
         await SecureStore.setItemAsync("token", res.data.token);
         await SecureStore.setItemAsync("isLoggedIn", "true");

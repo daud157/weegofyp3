@@ -77,7 +77,7 @@ const Signup: React.FC = () => {
     }
 
     setErrors(errors);
-
+    console.log(process.env.EXPO_PUBLIC_BACKEND_IP);
     if (valid) {
       const data = {
         firstname,
@@ -86,7 +86,10 @@ const Signup: React.FC = () => {
         password,
       };
       axios
-        .post("http://192.168.218.12:3000/auth/register", { data })
+        .post(
+          `http://${process.env.EXPO_PUBLIC_BACKEND_IP}:3000/auth/register`,
+          { data }
+        )
         .then((response) => {
           console.log(response.data.message);
           SecureStore.setItemAsync("isLoggedIn", "true");
@@ -234,7 +237,9 @@ const Signup: React.FC = () => {
             {navigating ? (
               <ActivityIndicator size="small" color="#yellow" />
             ) : (
-              <Text className="text-yellow-500 font-semibold ml-1">Sign in</Text>
+              <Text className="text-yellow-500 font-semibold ml-1">
+                Sign in
+              </Text>
             )}
           </TouchableOpacity>
         </View>

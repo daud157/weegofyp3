@@ -9,22 +9,26 @@ import { useTheme } from "@/context/ThemeContext";
 import PassengerMainHome from "./index";
 import ProfileScreen from "./ProfileScreen";
 import WalletScreen from "./WalletScreen";
-import BookingHistory from "./BookingHistory"; 
-import BookingScreensLayout from "./BookingScreens/_layout"; // Correct import for nested layout
+import BookingHistory from "./BookingHistory";
+import BookingScreensLayout from "./BookingScreens/index"; // Correct import for nested layout
 
 const Tab = createBottomTabNavigator();
 
 const HomeScreen: React.FC = () => {
   const navigation = useNavigation();
-  const { theme, isDarkMode, toggleDarkMode } = useTheme(); 
+  const { theme, isDarkMode, toggleDarkMode } = useTheme();
 
   const drawerAction = () => {
     navigation.dispatch(DrawerActions.openDrawer());
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <View style={[styles.drawerButton, { backgroundColor: theme.colors.card }]}>
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+    >
+      <View
+        style={[styles.drawerButton, { backgroundColor: theme.colors.card }]}
+      >
         <TouchableOpacity onPress={drawerAction}>
           <Ionicons name="menu" size={28} color={theme.colors.text} />
         </TouchableOpacity>
@@ -59,10 +63,7 @@ const HomeScreen: React.FC = () => {
         />
 
         {/* Wallet */}
-        <Tab.Screen
-          name="Wallet"
-          component={WalletScreen}
-        />
+        <Tab.Screen name="Wallet" component={WalletScreen} />
 
         {/* Profile */}
         <Tab.Screen

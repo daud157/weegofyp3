@@ -52,9 +52,12 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       const token = await getToken();
       if (token) {
         try {
-          const res = await axios.post("http://192.168.218.12:3000/auth", {
-            token,
-          });
+          const res = await axios.post(
+            `http://${process.env.EXPO_PUBLIC_BACKEND_IP}:3000/auth`,
+            {
+              token,
+            }
+          );
           setUser(res.data.data);
           setIsLoggedIn(true);
         } catch (err) {

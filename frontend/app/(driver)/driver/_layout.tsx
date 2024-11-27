@@ -33,10 +33,13 @@ export function CustomDrawerContent(props: any) {
     const updatedStatus = "passenger";
     const token = await SecureStore.getItemAsync("token");
     axios
-      .post("http://192.168.100.25:3000/auth/updateCurrentStatus", {
-        token,
-        updatedStatus,
-      })
+      .post(
+        `http://${process.env.EXPO_PUBLIC_BACKEND_IP}:3000/auth/updateCurrentStatus`,
+        {
+          token,
+          updatedStatus,
+        }
+      )
       .then((response) => {
         setUser(response.data.user);
       })

@@ -31,10 +31,13 @@ export function CustomDrawerContent(props: any) {
     const updatedStatus = "driver";
     const token = await SecureStore.getItemAsync("token");
     axios
-      .post("http://192.168.100.23:3000/auth/updateCurrentStatus", {
-        token,
-        updatedStatus,
-      })
+      .post(
+        `http://${process.env.EXPO_PUBLIC_BACKEND_IP}:3000/auth/updateCurrentStatus`,
+        {
+          token,
+          updatedStatus,
+        }
+      )
       .then((response) => {
         setUser(response.data.user);
       })
@@ -84,7 +87,7 @@ export function CustomDrawerContent(props: any) {
         <View
           className="mb-4"
           style={{
-            marginBottom: bottom,
+            marginTop: "auto",
           }}
         >
           {user?.isDriver ? (
@@ -99,9 +102,9 @@ export function CustomDrawerContent(props: any) {
           ) : null}
         </View>
         <View
-          className="mb-4"
+          className="mb-8"
           style={{
-            marginBottom: bottom,
+            marginBottom: "auto",
           }}
         >
           <TouchableOpacity

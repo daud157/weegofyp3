@@ -79,10 +79,13 @@ const Signup: React.FC = () => {
         vehicleNumber,
       };
       axios
-        .post("http://192.168.218.12:3000/auth/addDriverProfile", {
-          token,
-          data,
-        })
+        .post(
+          `http://${process.env.EXPO_PUBLIC_BACKEND_IP}:3000/auth/addDriverProfile`,
+          {
+            token,
+            data,
+          }
+        )
         .then((response) => {
           console.log(response.data.message);
           setUser(response.data.data);
