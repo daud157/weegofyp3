@@ -1,5 +1,5 @@
 import React from "react";
-import { View, TouchableOpacity, StyleSheet } from "react-native";
+import { View, TouchableOpacity, StyleSheet } from "react-native"; // Ensure View is imported
 import { StatusBar } from "expo-status-bar";
 import { useNavigation } from "expo-router";
 import { DrawerActions } from "@react-navigation/native";
@@ -10,7 +10,8 @@ import PassengerMainHome from "./index";
 import ProfileScreen from "./ProfileScreen";
 import WalletScreen from "./WalletScreen";
 import BookingHistory from "./BookingHistory";
-import BookingScreensLayout from "./BookingScreens/index"; // Correct import for nested layout
+import Child1Screen from "../BookingScreens/index";
+import BookingLayout from "../BookingScreens/_layout";
 
 const Tab = createBottomTabNavigator();
 
@@ -34,7 +35,7 @@ const HomeScreen: React.FC = () => {
         </TouchableOpacity>
       </View>
 
-      <Tab.Navigator
+      <Tab.Navigator 
         screenOptions={({ route }) => ({
           tabBarIcon: ({ color, size }) => {
             let iconName = "home";
@@ -50,43 +51,22 @@ const HomeScreen: React.FC = () => {
           headerShown: false,
         })}
       >
-        {/* Main Home */}
         <Tab.Screen
           name="Home"
-          component={PassengerMainHome} // Directly use the component instead of passing it as a child
+          component={BookingLayout} // Directly use the component instead of passing it as a child
         />
-
-        {/* Booking Screens */}
         <Tab.Screen
-          name="Bookings"
-          component={BookingScreensLayout} // Correct use of component
+          name="BookingScreens"
+          component={BookingHistory} // Correct use of component
         />
-
-        {/* Wallet */}
         <Tab.Screen name="Wallet" component={WalletScreen} />
-
-        {/* Profile */}
-        <Tab.Screen
-          name="Profile"
-          options={{
-            title: "Profile",
-          }}
-        >
-          {() => (
-            <ProfileScreen
-              isDarkMode={isDarkMode}
-              toggleDarkMode={toggleDarkMode} // Use global toggle
-            />
-          )}
-        </Tab.Screen>
+        <Tab.Screen name="Profile" component={ProfileScreen} />
       </Tab.Navigator>
 
       <StatusBar style={isDarkMode ? "light" : "dark"} />
     </View>
   );
 };
-
-export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
@@ -99,3 +79,5 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
 });
+
+export default HomeScreen;

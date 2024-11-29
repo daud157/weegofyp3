@@ -5,13 +5,14 @@ const express = require('express');
 const app = express();
 const {connectToDatabase} = require('./database');
 const userRoutes = require('./routes/user');
-
+const fareRoutes = require('./routes/fareRoutes');
 
 
 connectToDatabase();
 app.use(express.json());
 app.use(cors());
 app.use('/auth', userRoutes);
+app.use('/api',fareRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
