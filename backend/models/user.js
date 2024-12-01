@@ -17,7 +17,17 @@ const driverProfileSchema = new Schema({
         type: Boolean,
         default: false,
     },
-});
+    isOnline:{
+        type:Boolean,
+        default:false,
+    },
+    joinedDate:{
+        type:Date,
+        default:Date.now,
+    }
+},
+);
+
 
 const userSchema = new Schema({
     firstname: {
@@ -51,6 +61,9 @@ const userSchema = new Schema({
         type: driverProfileSchema,
         default: null,
     },
+},
+{
+  timestamps: true,
 });
 
 const User = model('User', userSchema);
