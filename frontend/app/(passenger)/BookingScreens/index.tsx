@@ -24,6 +24,9 @@ const PassengerMainHome = () => {
   const [currentLocation, setCurrentLocation] = useState(null); 
   const [originCoordinates, setOriginCoordinates] = useState(null); 
  const [destinationCoordinates, setDestinationCoordinates] = useState(null);
+ const [rideDetails,setRideDetails]=useState(null);
+ const [isPressed, setIsPressed] = useState(false); // State to track if button is pressed
+ const [isClicked, setIsClicked] = useState(false);
    // Store destination coordinates// Store pickup coordinates// State to store the current location
   //  const [originCoordinates, setOriginCoordinates] = useState<string | null>(null);
   //  const [destinationCoordinates, setDestinationCoordinates] = useState<string | null>(null);
@@ -31,11 +34,11 @@ const PassengerMainHome = () => {
   const router = useRouter();
   const Navigation = useNavigation(); // Navigation instance
   
-  // const GOOGLE_PLACES_API_KEY = ''; // API key
+  // const GOOGLE_PLACES_API_KEY = 'AIzaSyD6Z0WUBBY6y5VmdfTGXjVE2qqTQjCxxu4'; // Replace with your API key
   const vehicles = [
-    { id: "1", type: "Bike", rate: "$5", icon: "🚲", nearby: "7 nearbies" },
-    { id: "2", type: "Car", rate: "$10", icon: "🚗", nearby: "9 nearbies" },
-    { id: "3", type: "Van", rate: "$15", icon: "🚐", nearby: "4 nearbies" },
+    { id: "1", type: "Bike",  rate: rideDetails ? `$${rideDetails.fares.bike}` :"$10", icon: "🚲", nearby: "7 nearbies" },
+    { id: "2", type: "Economy", rate: rideDetails ? `$${rideDetails.fares.economy}` :"$10", icon: "🚗", nearby: "9 nearbies" },
+    { id: "3", type: "Comfort", rate: rideDetails ? `$${rideDetails.fares.comfort}` :"$10", icon: "🚐", nearby: "4 nearbies" },
   ];
 
   // Get current location on component mount
@@ -62,6 +65,7 @@ const PassengerMainHome = () => {
       </View>
     );
   }
+
   const calculateFare = async () => {
     try {
       // Send request to the backend API with origin and destination
@@ -72,8 +76,9 @@ const PassengerMainHome = () => {
         },
         body: JSON.stringify({
   // const [originCoordinates, setOriginCoordinates] = useState(null); 
-              origin: "13.0827,80.2707",
-              destination: "13.0827,80.2707",
+              origin: `${originCoordinates.latitude},${originCoordinates.longitude}`,
+              
+              destination:`${destinationCoordinates.latitude},${destinationCoordinates.longitude}`,
         }),
       });
 
@@ -86,6 +91,19 @@ const PassengerMainHome = () => {
       // Set distance and fare from the API response
       if (response.ok) {
         console.log(data.distance)
+        console.log(data.fares.bike)
+        setRideDetails({
+          distance: data.distance,
+          duration: data.duration,
+          fares:{
+            bike: data.fares.bike,
+            comfort: data.fares.comfort,
+            economy: data.fares.economy,
+      
+          },
+          
+        })
+
         // setDistance(data.distance); // Assuming the API returns a 'distance'
         // setFare(data.fare); // Assuming the API returns a 'fare'
       } else {
@@ -95,6 +113,13 @@ const PassengerMainHome = () => {
       console.error('Error:', error);
       alert('Failed to fetch fare information');
     }
+
+  };
+  console.log({rideDetails});
+
+  
+  const handleRideSharing = () => {
+    setIsClicked(!isClicked); // Toggle state on button click
   };
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -179,6 +204,8 @@ const PassengerMainHome = () => {
               latitude: details?.geometry?.location.lat,
               longitude: details?.geometry?.location.lng,
             });
+            console.log(`${originCoordinates.latitude},${originCoordinates.longitude}`);
+            
           }}
                 query={{
                   key: GOOGLE_PLACES_API_KEY,
@@ -284,9 +311,16 @@ const PassengerMainHome = () => {
                 </TouchableOpacity>
               )}
             />
+             <TouchableOpacity
+                   style={[styles.confirmButton, { backgroundColor: isClicked ? "#007BFF":"#FFD700"  }]} // Toggle button color
+                   onPress={handleRideSharing} // Handle button press
+               >
+                <Text style={styles.confirmButtonText}>{isClicked ? "Disable Ride Sharing" : "Enable Ride sharing"} </Text>
+             </TouchableOpacity>
 
             <TouchableOpacity
               style={[styles.confirmButton, { backgroundColor: theme.colors.primary }]}
+           
               onPress={() => {
                 Navigation.navigate("Home", { screen: "Details" });
               }}
@@ -295,6 +329,7 @@ const PassengerMainHome = () => {
                 Confirm Vehicle
               </Text>
             </TouchableOpacity>
+           
           </View>
         </View>
       </Modal>
@@ -334,7 +369,8 @@ const styles = StyleSheet.create({
   vehicleType: { fontSize: 16, fontWeight: "bold" },
   vehicleNearby: { fontSize: 12 },
   vehicleRate: { fontSize: 16, fontWeight: "bold" },
-  confirmButton: { paddingVertical: 10, borderRadius: 5, alignItems: "center" },
+  confirmButton: { paddingVertical: 10, borderRadius: 50, alignItems: "center",marginBottom:10 },
+  
   confirmButtonText: { fontSize: 16, fontWeight: "bold" },
 });
 
